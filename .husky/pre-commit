@@ -1,1 +1,18 @@
 mvn spotless:apply
+
+echo "Running Spring Boot unit tests..."
+mvn test
+if [ $? -ne 0 ]; then
+    echo "Unit tests failed. Commit aborted."
+    exit 1
+fi
+
+# echo "Running Snyk security test..."
+# snyk test
+# if [ $? -ne 0 ]; then
+#     echo "Snyk test failed. Commit aborted."
+#     exit 1
+# fi
+
+echo "All checks passed. Proceeding with commit."
+exit 0
