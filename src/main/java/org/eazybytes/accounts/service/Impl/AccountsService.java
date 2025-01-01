@@ -1,15 +1,18 @@
 package org.eazybytes.accounts.service.Impl;
 
-import static org.eazybytes.accounts.mapper.CustomerMapper.toCustomer;
-
+import jakarta.validation.constraints.Pattern;
 import java.util.Optional;
 import java.util.Random;
 import lombok.AllArgsConstructor;
 import org.eazybytes.accounts.constants.AccountConstants;
+import org.eazybytes.accounts.dto.AccountDto;
 import org.eazybytes.accounts.dto.CustomerDto;
 import org.eazybytes.accounts.entity.Account;
 import org.eazybytes.accounts.entity.Customer;
 import org.eazybytes.accounts.exception.CustomerAlreadyExistsException;
+import org.eazybytes.accounts.exception.ResourceNotFoundException;
+import org.eazybytes.accounts.mapper.AccountsMapper;
+import org.eazybytes.accounts.mapper.CustomerMapper;
 import org.eazybytes.accounts.repository.AccountRepository;
 import org.eazybytes.accounts.repository.CustomerRepository;
 import org.eazybytes.accounts.service.IAccountsService;
@@ -27,7 +30,7 @@ public class AccountsService implements IAccountsService {
    */
   @Override
   public void createAccount(CustomerDto customerDto) {
-    Customer customer = toCustomer(customerDto, new Customer());
+    Customer customer = CustomerMapper.toCustomer(customerDto, new Customer());
     Optional<Customer> optionalCustomer =
         customerRepository.findByMobileNumber(customerDto.getMobileNumber());
     if (optionalCustomer.isPresent()) {
@@ -59,8 +62,25 @@ public class AccountsService implements IAccountsService {
    * @return Accounts Details based on a given mobileNumber
    */
   @Override
-  public CustomerDto getAccount(String mobileNumber) {
-    return null;
+  public CustomerDto getAccount(
+      @Pattern(regexp = "(^$|[6-9][0-9]{9})", message = "Mobile number must be 10 digits")
+          String mobileNumber) {
+    Customer customer =
+        customerRepository
+            .findByMobileNumber(mobileNumber)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+    Account account =
+        accountRepository
+            .findByCustomerId(customer.getCustomerId())
+            .orElseThrow(
+                () -> {
+                  return new ResourceNotFoundException("Account", "customerid", mobileNumber);
+                });
+    AccountDto accountDto = AccountsMapper.toAccountDto(account, new AccountDto());
+    CustomerDto customerDto = CustomerMapper.toCustomerDto(customer, new CustomerDto());
+    customerDto.setAccountsDto(accountDto);
+    return customerDto;
   }
 
   /**

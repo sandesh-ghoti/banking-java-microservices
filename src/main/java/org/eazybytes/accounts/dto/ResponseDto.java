@@ -8,4 +8,5 @@ import lombok.Data;
 public class ResponseDto {
   private String message;
   private String statusCode;
+  private Object details;
 }

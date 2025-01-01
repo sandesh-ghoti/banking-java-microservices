@@ -24,6 +24,15 @@ public class AccountsController {
   public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
     accountsService.createAccount(customerDto);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(new ResponseDto(AccountConstants.MESSAGE_201, AccountConstants.STATUS_201));
+        .body(new ResponseDto(AccountConstants.MESSAGE_201, AccountConstants.STATUS_201, null));
+  }
+
+  @GetMapping("/get")
+  public ResponseEntity<ResponseDto> getAccount(@Valid @RequestParam String mobileNumber) {
+    CustomerDto customerDto = accountsService.getAccount(mobileNumber);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(
+            new ResponseDto(
+                AccountConstants.MESSAGE_200, AccountConstants.STATUS_200, customerDto));
   }
 }
