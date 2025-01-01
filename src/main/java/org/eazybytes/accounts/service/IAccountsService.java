@@ -4,6 +4,9 @@ import org.eazybytes.accounts.dto.CustomerDto;
 
 public interface IAccountsService {
   /**
+   * Create new account for provided user details 1. check user must be new 2. create user 3. create
+   * account
+   *
    * @param customerDto - CustomerDto Object
    */
   void createAccount(CustomerDto customerDto);

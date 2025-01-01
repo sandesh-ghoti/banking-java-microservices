@@ -1,4 +1,8 @@
-POST http://localhost:8080/api/create HTTP/1.1
+### Env
+@base_url=http://localhost:8080
+
+# @name createAccount Create new account
+POST {{base_url}}/api/create HTTP/1.1
 content-type: application/json
 
 {
