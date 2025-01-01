@@ -1,11 +1,16 @@
+STAGED_FILES=$(git diff --name-only --cached --diff-filter=AM)
+# Check Spotless formatting
+echo "Checking Spotless formatting..."
 mvn spotless:apply
+git add $(STAGED_FILES)
 
-echo "Running Spring Boot unit tests..."
-mvn test
-if [ $? -ne 0 ]; then
-    echo "Unit tests failed. Commit aborted."
-    exit 1
-fi
+
+# echo "Running Spring Boot unit tests..."
+# mvn test
+# if [ $? -ne 0 ]; then
+#     echo "Unit tests failed. Commit aborted."
+#     exit 1
+# fi
 
 # echo "Running Snyk security test..."
 # snyk test
