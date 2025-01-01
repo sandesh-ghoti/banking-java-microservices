@@ -1,6 +1,5 @@
 package org.eazybytes.accounts.service.Impl;
 
-import jakarta.validation.constraints.Pattern;
 import java.util.Optional;
 import java.util.Random;
 import lombok.AllArgsConstructor;
@@ -62,9 +61,7 @@ public class AccountsService implements IAccountsService {
    * @return Accounts Details based on a given mobileNumber
    */
   @Override
-  public CustomerDto getAccount(
-      @Pattern(regexp = "(^$|[6-9][0-9]{9})", message = "Mobile number must be 10 digits")
-          String mobileNumber) {
+  public CustomerDto getAccount(String mobileNumber) {
     Customer customer =
         customerRepository
             .findByMobileNumber(mobileNumber)

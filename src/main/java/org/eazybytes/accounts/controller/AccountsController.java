@@ -1,6 +1,7 @@
 package org.eazybytes.accounts.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.eazybytes.accounts.constants.AccountConstants;
 import org.eazybytes.accounts.dto.CustomerDto;
@@ -9,6 +10,7 @@ import org.eazybytes.accounts.service.IAccountsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(
     path = "/api",
     produces = {MediaType.APPLICATION_JSON_VALUE})
+@Validated
 public class AccountsController {
 
   private IAccountsService accountsService;
@@ -28,7 +31,11 @@ public class AccountsController {
   }
 
   @GetMapping("/get")
-  public ResponseEntity<ResponseDto> getAccount(@Valid @RequestParam String mobileNumber) {
+  public ResponseEntity<ResponseDto> getAccount(
+      @Valid
+          @RequestParam
+          @Pattern(regexp = "(^$|[6-9][0-9]{9})", message = "Mobile number must be valid 10 digits")
+          String mobileNumber) {
     CustomerDto customerDto = accountsService.getAccount(mobileNumber);
     return ResponseEntity.status(HttpStatus.OK)
         .body(
@@ -45,7 +52,11 @@ public class AccountsController {
   }
 
   @DeleteMapping("/delete")
-  public ResponseEntity<ResponseDto> deleteAccount(@Valid @RequestParam String mobileNumber) {
+  public ResponseEntity<ResponseDto> deleteAccount(
+      @Valid
+          @RequestParam
+          @Pattern(regexp = "(^$|[6-9][0-9]{9})", message = "Mobile number must be valid 10 digits")
+          String mobileNumber) {
     boolean isDeleted = accountsService.deleteAccount(mobileNumber);
     return ResponseEntity.status(HttpStatus.OK)
         .body(
