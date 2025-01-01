@@ -122,6 +122,13 @@ public class AccountsService implements IAccountsService {
    */
   @Override
   public boolean deleteAccount(String mobileNumber) {
-    return false;
+    Customer customer =
+        customerRepository
+            .findByMobileNumber(mobileNumber)
+            .orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber));
+    accountRepository.deleteByCustomerId(customer.getCustomerId());
+    customerRepository.delete(customer);
+    return true;
   }
 }

@@ -29,3 +29,7 @@ content-type: application/json
         "branchAddress": "changed"
     }
 }
+
+### @name deleteAccount
+DELETE {{base_url}}/api/delete?mobileNumber=1234567890 HTTP/1.1
+content-type: application/json
