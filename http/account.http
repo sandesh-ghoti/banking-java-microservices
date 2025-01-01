@@ -14,3 +14,18 @@ content-type: application/json
 ### @name getAccount
 GET {{base_url}}/api/get?mobileNumber=1234567890 HTTP/1.1
 content-type: application/json
+
+#### @name updateAccount
+PUT {{base_url}}/api/update HTTP/1.1
+content-type: application/json
+
+{
+    "name": "test-user",
+    "email": "test@test.com",
+    "mobileNumber": "1234567890",
+    "accountsDto":{
+        "accountNumber": "1167402161",
+        "accountType": "current",
+        "branchAddress": "changed"
+    }
+}

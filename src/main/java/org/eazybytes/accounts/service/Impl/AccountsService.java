@@ -89,7 +89,31 @@ public class AccountsService implements IAccountsService {
    */
   @Override
   public boolean updateAccount(CustomerDto customerDto) {
-    return false;
+    boolean isUpdated = false;
+    AccountDto accountDto = customerDto.getAccountsDto();
+    if (accountDto != null) {
+
+      Account account =
+          accountRepository
+              .findById(accountDto.getAccountNumber())
+              .orElseThrow(
+                  () ->
+                      new ResourceNotFoundException(
+                          "Account", "accountNumber", accountDto.getAccountNumber().toString()));
+      account = accountRepository.save(AccountsMapper.toAccount(accountDto, account));
+      Long customerId = account.getCustomerId();
+      Customer customer =
+          customerRepository
+              .findById(account.getCustomerId())
+              .orElseThrow(
+                  () ->
+                      new ResourceNotFoundException(
+                          "Customer", "customerId", customerId.toString()));
+      customerRepository.save(CustomerMapper.toCustomer(customerDto, customer));
+
+      isUpdated = true;
+    }
+    return isUpdated;
   }
 
   /**
