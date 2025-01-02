@@ -6,13 +6,13 @@ POST {{base_url}}/api/create HTTP/1.1
 content-type: application/json
 
 {
-    "name": "test",
+    "name": "tester",
     "email": "email@test.com",
-    "mobileNumber": "1234567890"
+    "mobileNumber": "1234567789"
 }
 
 ### @name getAccount
-GET {{base_url}}/api/get?mobileNumber=1234567890 HTTP/1.1
+GET {{base_url}}/api/get?mobileNumber=9876543210 HTTP/1.1
 content-type: application/json
 
 #### @name updateAccount
